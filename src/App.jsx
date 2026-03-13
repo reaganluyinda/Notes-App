@@ -5,6 +5,7 @@ import loginService from "./services/login";
 import Notification from "./components/Notification.jsx";
 import Footer from "./components/Footer.jsx";
 import LoginForm from "./components/LoginForm.jsx";
+import Togglable from "./components/Togglable.jsx";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -14,7 +15,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const[user, setUser] = useState(null);
-  const [loginVisible, setLoginVisible] = useState(false);
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -103,23 +103,7 @@ const App = () => {
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   //helper functions for generating forms
- const loginForm = () => {
-  const hideWhenVisible = {display: loginVisible ? 'none' : ''}
-  const showWhenVisible = {display: loginVisible ? '' : 'none'}
-
-  return(
-    <div>
-      <div style={hideWhenVisible}>
-        <button onClick={()=> setLoginVisible(true)}>log in</button>
-      </div>
-      <div style={showWhenVisible}>
-<LoginForm handleSubmit={handleLogin} handleUsernameChange={({target}) => setUsername(target.value)} handlePasswordChange={({target}) => setPassword(target.value)} username={username} password={password}/>
-      <button onClick={()=> setLoginVisible(false)}>cancel</button>
-      </div>
-    </div>
-  )
- }
-
+ 
 
   const noteForm = () => (
 <form onSubmit={addNote}>
@@ -134,7 +118,12 @@ const App = () => {
       <Notification message={errorMessage} />
 
 {/* login or note form */}
-     {!user && loginForm() }
+     {!user && (
+      <Togglable buttonLabel='login'>
+  <LoginForm handleSubmit={handleLogin} handleUsernameChange={({target}) => setUsername(target.value)} handlePasswordChange={({target}) => setPassword(target.value)} username={username} password={password} />
+ </Togglable>
+
+     ) }
     {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p>{noteForm()}</div>)}
 
 {/* end of login or form */}
