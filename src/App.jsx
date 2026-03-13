@@ -5,6 +5,7 @@ import loginService from "./services/login";
 import Notification from "./components/Notification.jsx";
 import Footer from "./components/Footer.jsx";
 import LoginForm from "./components/LoginForm.jsx";
+import NoteForm from "./components/NoteForm.jsx";
 import Togglable from "./components/Togglable.jsx";
 
 const App = () => {
@@ -101,17 +102,7 @@ const App = () => {
   };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
-
-  //helper functions for generating forms
  
-
-  const noteForm = () => (
-<form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
-      </form>
-  )
-
   return (
     <div>
       <h1>Notes App</h1>
@@ -124,7 +115,7 @@ const App = () => {
  </Togglable>
 
      ) }
-    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p>{noteForm()}</div>)}
+    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='new note'><NoteForm onSubmit={addNote} value={newNote} handleChange={handleNoteChange} /></Togglable></div>)}
 
 {/* end of login or form */}
 
