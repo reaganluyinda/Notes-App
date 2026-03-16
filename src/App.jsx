@@ -10,7 +10,6 @@ import Togglable from "./components/Togglable.jsx";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
@@ -58,25 +57,12 @@ const App = () => {
     setUser(null);
   }
 
-  const addNote = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    };
-
+  const addNote = (noteObject) => {
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
-      setNewNote("");
     });
   };
 
-  
- 
-  // note change handler
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value);
-  };
 
   // toggle importance of a note
   const toggleImportanceOf = (id) => {
@@ -115,7 +101,7 @@ const App = () => {
  </Togglable>
 
      ) }
-    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='new note'><NoteForm onSubmit={addNote} value={newNote} handleChange={handleNoteChange} /></Togglable></div>)}
+    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='new note'><NoteForm createNote={addNote} /></Togglable></div>)}
 
 {/* end of login or form */}
 
