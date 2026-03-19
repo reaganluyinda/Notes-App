@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Note from "./components/Note";
 import noteService from "./services/notes";
 import loginService from "./services/login"; 
@@ -13,6 +13,8 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const[user, setUser] = useState(null);
+
+  const noteFormRef = useRef()
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -29,6 +31,7 @@ const App = () => {
       noteService.setToken(user.token);
     }
   }, []);
+
 
   //login handler
   const handleLogin = async ({username, password}) => {
@@ -53,6 +56,7 @@ const App = () => {
   }
 
   const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
     });
@@ -96,7 +100,7 @@ const App = () => {
  </Togglable>
 
      ) }
-    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='new note'><NoteForm createNote={addNote} /></Togglable></div>)}
+    {user && (<div><p>Welcome, {user.name}! <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='new note' ref={noteFormRef}><NoteForm createNote={addNote} /></Togglable></div>)}
 
 {/* end of login or form */}
 
