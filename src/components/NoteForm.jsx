@@ -12,7 +12,7 @@ const NoteForm = ({  createNote }) => {
     <div>
       <h2>Create a new note</h2>
       <form onSubmit={addNote}>
-        <input value={newNote} onChange={(event) => setNewNote(event.target.value)}/>
+        <input value={newNote} onChange={(event) => setNewNote(event.target.value)} placeholder='write note content here'/>
         <button type="submit">save</button>
       </form>
     </div>
